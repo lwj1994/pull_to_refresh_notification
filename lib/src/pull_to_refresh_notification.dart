@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart' show CupertinoDynamicColor;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 // The over-scroll distance that moves the indicator to its maximum
 // displacement, as a percentage of the scrollable's container extent.
@@ -137,6 +135,7 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
     with TickerProviderStateMixin<PullToRefreshNotification> {
   final StreamController<PullToRefreshScrollNotificationInfo> _onNoticed =
       StreamController<PullToRefreshScrollNotificationInfo>.broadcast();
+
   Stream<PullToRefreshScrollNotificationInfo> get onNoticed =>
       _onNoticed.stream;
 
@@ -150,7 +149,9 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
   Animation<double>? _pullBackFactor;
 
   PullToRefreshIndicatorMode? _mode;
+
   PullToRefreshIndicatorMode? get _refreshIndicatorMode => _mode;
+
   set _refreshIndicatorMode(PullToRefreshIndicatorMode? value) {
     if (_mode != value) {
       _mode = value;
@@ -161,7 +162,9 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
   Future<void>? _pendingRefreshFuture;
   bool? _isIndicatorAtTop;
   double? _dragOffset;
+
   double? get _notificationDragOffset => _dragOffset;
+
   set _notificationDragOffset(double? value) {
     if (value != null) {
       value = math.max(
@@ -216,6 +219,7 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
   }
 
   double maxContainerExtent = 0.0;
+
   bool _handleScrollNotification(ScrollNotification notification) {
     final bool reuslt = _innerhandleScrollNotification(notification);
     //_onInnerNoticed();
@@ -242,6 +246,7 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
       return false;
     }
     bool? indicatorAtTopNow;
+
     switch (notification.metrics.axisDirection) {
       case AxisDirection.down:
         indicatorAtTopNow = !widget.reverse;
@@ -256,8 +261,9 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
     }
     if (indicatorAtTopNow != _isIndicatorAtTop) {
       if (_refreshIndicatorMode == PullToRefreshIndicatorMode.drag ||
-          _refreshIndicatorMode == PullToRefreshIndicatorMode.armed)
-        dismiss(PullToRefreshIndicatorMode.canceled);
+          _refreshIndicatorMode == PullToRefreshIndicatorMode.armed) {
+        //dismiss(PullToRefreshIndicatorMode.canceled);
+      }
     } else if (notification is ScrollUpdateNotification) {
       if (_refreshIndicatorMode == PullToRefreshIndicatorMode.drag ||
           _refreshIndicatorMode == PullToRefreshIndicatorMode.armed) {
@@ -268,7 +274,7 @@ class PullToRefreshNotificationState extends State<PullToRefreshNotification>
               !widget.armedDragUpCancel) {
             _show();
           } else {
-            dismiss(PullToRefreshIndicatorMode.canceled);
+            // dismiss(PullToRefreshIndicatorMode.canceled);
           }
         } else {
           if (widget.reverse) {
@@ -584,6 +590,7 @@ bool defaultNotificationPredicate(ScrollNotification notification) {
 class PullToRefreshScrollNotificationInfo {
   PullToRefreshScrollNotificationInfo(this.mode, this.dragOffset,
       this.refreshWidget, this.pullToRefreshNotificationState);
+
   final PullToRefreshIndicatorMode? mode;
   final double? dragOffset;
   final Widget? refreshWidget;
@@ -592,7 +599,9 @@ class PullToRefreshScrollNotificationInfo {
 
 class PullToRefreshContainer extends StatefulWidget {
   const PullToRefreshContainer(this.builder);
+
   final PullToRefreshContainerBuilder builder;
+
   @override
   _PullToRefreshContainerState createState() => _PullToRefreshContainerState();
 }
